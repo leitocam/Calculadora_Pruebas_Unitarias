@@ -1,75 +1,218 @@
-.App {
-  color: slategray;
+/* Estilos Principales de la Aplicaci\u00f3n */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f5f7fa 0%, #f0f2f5 100%);
+}
+
+/* Encabezado de la Aplicaci\u00f3n */
+
+.app-header {
+  background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
+  color: white;
+  padding: 3rem 0;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid #0c4a6e;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.app-header h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.app-header p {
+  font-size: 1rem;
+  opacity: 0.9;
+  font-weight: 400;
+  margin: 0;
+}
+
+.header-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  opacity: 0.95;
+}
+
+/* Contenedor Principal */
+
+.app-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.app-main {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-body, html {
-  background-color: #b3e7f5;
-  display: flex;
-  flex-direction: column;
-  font-size: calc(10px + 2vmin);
-  color: rgb(69, 77, 85);
-  margin-left: 10px;
+/* Contenedor de Pesta\u00f1as */
+
+.tabs-wrapper {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fafbfc;
 }
 
-.App-link {
-  color: #61dafb;
+/* \u00c1rea de Contenido */
+
+.content-area {
+  padding: 2rem 1.5rem;
+  background: white;
+  animation: contentFadeIn 0.3s ease;
 }
 
-label {
-  display: block;
-  color: darkslategray;
-  font-family: 'Raleway', sans-serif;
-  font-size: 16px;
-  text-align: left;
-  font-weight: 500;
-  padding: .25rem;
-  margin-right: 15px;
-  margin-top: 10px;
+@keyframes contentFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-input {
-  background-color: white;
-  border-radius: 5%;
-  border: 2px solid grey;
-  width: 30%;
-}
+/* Pie de P\u00e1gina */
 
-form {
-    padding: .5em;
-    font-size: 1.2em;
-}
-
-
-header {
+.app-footer {
+  background: #1f2937;
+  color: white;
+  padding: 2rem;
   text-align: center;
+  margin-top: 3rem;
+  border-top: 1px solid #374151;
 }
 
-button {
-  padding: 5px;
-  margin-top: 10px;
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.calculate {
-  margin-left: 30px;
-  padding: 5px;
-  font-weight: bold;
-  font-size: .5em;
-  background-color: gray;
+.app-footer p {
+  margin: 0.5rem 0;
+  opacity: 0.85;
+  font-size: 0.95rem;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: #93c5fd;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
   color: white;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Dise\u00f1o Responsivo */
+
+@media (max-width: 768px) {
+  #root {
+    background: linear-gradient(180deg, #f5f7fa 0%, #f0f2f5 100%);
   }
-  to {
-    transform: rotate(360deg);
+
+  .app-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .app-header p {
+    font-size: 0.95rem;
+  }
+
+  .header-icon {
+    font-size: 2rem;
+  }
+
+  .app-container {
+    margin: 1rem auto;
+  }
+
+  .content-area {
+    padding: 1.5rem 1rem;
+  }
+
+  .tabs-wrapper {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .app-header p {
+    font-size: 0.9rem;
+  }
+
+  .header-icon {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .app-container {
+    padding: 0 0.5rem;
+  }
+
+  .app-main {
+    border-radius: 6px;
+  }
+
+  .content-area {
+    padding: 1rem;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }
 
