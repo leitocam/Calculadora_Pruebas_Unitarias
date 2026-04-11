@@ -138,3 +138,132 @@ export const validateAffordability = (monthlyPayment, monthlyIncome) => {
     return { isAffordable: false, ratio, message: '✗ High risk! This may be unaffordable' };
   }
 };
+
+// V(G) = 8 - COMPLEJIDAD CICLOMÁTICA
+export const evaluateRiskLevel = (creditRisk, debtRatio) => {
+  const riskMatrix = {
+    EXCELLENT: { baseScore: 20, level: 'LOW', recommendation: 'APPROVE_STANDARD' },
+    GOOD: { baseScore: 40, level: 'MODERATE', recommendation: 'APPROVE_WITH_TERMS' },
+    FAIR: { baseScore: 60, level: 'HIGH', recommendation: 'APPROVE_WITH_CONDITIONS' },
+    POOR: { baseScore: 75, level: 'HIGH', recommendation: 'REQUEST_HIGHER_DEPOSIT' },
+    VERY_POOR: { baseScore: 90, level: 'VERY_HIGH', recommendation: 'REQUIRES_SPECIALIST_REVIEW' }
+  };
+  
+  const baseRisk = riskMatrix[creditRisk] || { baseScore: 60, level: 'HIGH', recommendation: 'MANUAL_REVIEW' };
+  const adjustedScore = baseRisk.baseScore + (debtRatio * 0.5);
+  
+  let finalLevel = baseRisk.level;
+  if (adjustedScore > 80) finalLevel = 'VERY_HIGH';
+  else if (adjustedScore > 60) finalLevel = 'HIGH';
+  else if (adjustedScore > 40) finalLevel = 'MODERATE';
+  else finalLevel = 'LOW';
+
+  return {
+    level: finalLevel,
+    score: Math.round(adjustedScore),
+    recommendation: baseRisk.recommendation
+  };
+};
+
+export const analyzeMortgageEligibility = (applicant) => {
+  // D1: Validar ingresos
+  if (!applicant || applicant.monthlyIncome === undefined) {
+    return { eligible: false, reason: 'INVALID_INPUT' };
+  }
+
+  const monthlyIncome = applicant.monthlyIncome;
+  const monthlyCommitments = applicant.monthlyCommitments || 0;
+
+  if (monthlyIncome < monthlyCommitments) {
+    return { eligible: false, reason: 'INSUFFICIENT_INCOME', details: { deficit: monthlyCommitments - monthlyIncome } };
+  }
+
+  // D2: Validar depósito mínimo (5%)
+  const propertyPrice = applicant.propertyPrice;
+  const deposit = applicant.deposit;
+  const minDeposit = propertyPrice * 0.05;
+
+  if (deposit < minDeposit) {
+    return { eligible: false, reason: 'INSUFFICIENT_DEPOSIT', details: { required: minDeposit, provided: deposit } };
+  }
+
+  // D3: Validar deuda actual (<50%)
+  const currentDebt = applicant.currentDebt || 0;
+  const currentDebtRatio = (currentDebt / monthlyIncome) * 100;
+
+  if (currentDebtRatio > 50) {
+    return { eligible: false, reason: 'EXCESSIVE_CURRENT_DEBT', details: { currentRatio: currentDebtRatio, limit: 50 } };
+  }
+
+  // D4-D7: Categoría de riesgo crediticio (5-way branch)
+  const creditScore = applicant.creditScore;
+  let creditRisk;
+  if (creditScore >= 750) creditRisk = 'EXCELLENT';
+  else if (creditScore >= 700) creditRisk = 'GOOD';
+  else if (creditScore >= 650) creditRisk = 'FAIR';
+  else if (creditScore >= 600) creditRisk = 'POOR';
+  else creditRisk = 'VERY_POOR';
+
+  // Cálculos
+  const loanAmount = propertyPrice - deposit;
+  const availableIncome = monthlyIncome - monthlyCommitments;
+
+  // D8-D9: Estrategia de depósito (3-way branch)
+  const depositRatio = (deposit / propertyPrice) * 100;
+  let depositStrategy, depositRecommendation;
+  if (depositRatio >= 25) {
+    depositStrategy = 'OPTIMAL';
+    depositRecommendation = 'Depósito fuerte. Tasas favorables.';
+  } else if (depositRatio >= 15) {
+    depositStrategy = 'INCREASE_SLIGHTLY';
+    depositRecommendation = 'Depósito moderado. Mejora con cada 1%.';
+  } else {
+    depositStrategy = 'MINIMUM_REQUIRED';
+    depositRecommendation = 'Depósito mínimo. Evalúa affordability.';
+  }
+
+  const riskAssessment = evaluateRiskLevel(creditRisk, currentDebtRatio);
+
+  // LOOP: Analizar tasas de interés
+  const interestRates = [2.5, 3.5, 4.5, 5.5, 6.5];
+  const scenarios = [];
+
+  for (let rate of interestRates) {
+    const monthlyPayment = calculateMonthlyPayment(loanAmount, rate, applicant.loanTerm);
+    const totalCommitments = monthlyCommitments + currentDebt + monthlyPayment;
+    const newAffordability = (totalCommitments / monthlyIncome) * 100;
+
+    if (newAffordability <= 43) {
+      scenarios.push({
+        interestRate: rate,
+        monthlyPayment: Math.round(monthlyPayment * 100) / 100,
+        affordabilityRatio: Math.round(newAffordability),
+        totalMonthlyCommitment: Math.round(totalCommitments * 100) / 100,
+        isRecommended: rate === 3.5 || rate === 4.5
+      });
+    }
+  }
+
+  // D10: Validar escenarios viables
+  if (scenarios.length === 0) {
+    return { eligible: false, reason: 'NO_AFFORDABLE_SCENARIOS', details: { income: monthlyIncome, commitments: monthlyCommitments } };
+  }
+
+  const bestScenario = scenarios.reduce((best, current) => current.isRecommended ? current : best);
+
+  return {
+    eligible: true,
+    applicantProfile: {
+      creditRisk,
+      creditScore,
+      debtToIncomeRatio: Math.round(currentDebtRatio),
+      depositStrategy,
+      depositAmount: deposit,
+      depositRatioPercentage: Math.round(depositRatio)
+    },
+    riskAssessment: { level: riskAssessment.level, score: riskAssessment.score, recommendation: riskAssessment.recommendation },
+    scenarios: scenarios.map(s => ({ interestRate: s.interestRate, monthlyPayment: s.monthlyPayment, affordabilityRatio: s.affordabilityRatio, totalMonthlyCommitment: s.totalMonthlyCommitment })),
+    bestScenario: { interestRate: bestScenario.interestRate, monthlyPayment: bestScenario.monthlyPayment, affordabilityRatio: bestScenario.affordabilityRatio },
+    summary: { loanAmount, propertyPrice, availableIncome: Math.round(availableIncome * 100) / 100, recommendation: depositRecommendation }
+  };
+};
