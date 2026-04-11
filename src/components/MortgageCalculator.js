@@ -23,6 +23,7 @@ const MortgageCalculator = () => {
   const [errors, setErrors] = useState({});
   const [showSecondSalary, setShowSecondSalary] = useState(false);
   const [showAdjustmentPanel, setShowAdjustmentPanel] = useState(false);
+  const [showRecalculateMessage, setShowRecalculateMessage] = useState(false);
 
   const validateForm = () => {
     const newErrors = {};
@@ -97,6 +98,11 @@ const MortgageCalculator = () => {
     if (results) {
       const newResults = calculateResults(formData, adjustableValues);
       setResults(newResults);
+      // Mostrar mensaje de validación visual
+      setShowRecalculateMessage(true);
+      setTimeout(() => {
+        setShowRecalculateMessage(false);
+      }, 3000);
     }
   };
 
@@ -275,6 +281,63 @@ const MortgageCalculator = () => {
           <div className="results-section">
             <h2>📊 Resultados del Análisis</h2>
 
+            {/* ADJUSTMENT PANEL - ARRIBA */}
+            <div className="adjustment-section">
+              <button
+                className="adjustment-header"
+                onClick={() => setShowAdjustmentPanel(!showAdjustmentPanel)}
+              >
+                🔧 Ajustar Valores (Credit Score / Deuda Actual)
+              </button>
+              
+              {showAdjustmentPanel && (
+                <div className="adjustment-panel">
+                  <div className="adjustment-group">
+                    <label htmlFor="creditScore">Credit Score (Defecto: 700)</label>
+                    <input
+                      id="creditScore"
+                      type="number"
+                      name="creditScore"
+                      min="300"
+                      max="850"
+                      value={adjustableValues.creditScore}
+                      onChange={handleAdjustableChange}
+                      className="form-input"
+                    />
+                  </div>
+                  
+                  <div className="adjustment-group">
+                    <label htmlFor="currentDebt">Deuda Actual Mensual – £ (Defecto: 0)</label>
+                    <input
+                      id="currentDebt"
+                      type="number"
+                      name="currentDebt"
+                      min="0"
+                      value={adjustableValues.currentDebt}
+                      onChange={handleAdjustableChange}
+                      className="form-input"
+                    />
+                  </div>
+                  
+                  <button
+                    type="button"
+                    className="btn-primary"
+                    onClick={handleRecalculate}
+                  >
+                    🔄 Recalcular con Nuevos Valores
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* MENSAJE DE VALIDACIÓN VISUAL */}
+            {showRecalculateMessage && (
+              <div className="recalculate-success-message">
+                <span className="success-icon">✅</span>
+                <span className="success-text">Resultados recalculados con los nuevos valores</span>
+              </div>
+            )}
+
             {/* ELEGIBILIDAD */}
             {results.eligibilityAnalysis.eligible ? (
               <div className="eligibility-card eligible">
@@ -419,55 +482,6 @@ const MortgageCalculator = () => {
                 </div>
               </>
             )}
-
-            {/* ADJUSTMENT PANEL */}
-            <div className="adjustment-section">
-              <button
-                className="adjustment-header"
-                onClick={() => setShowAdjustmentPanel(!showAdjustmentPanel)}
-              >
-                🔧 Ajustar Valores (Credit Score / Deuda Actual)
-              </button>
-              
-              {showAdjustmentPanel && (
-                <div className="adjustment-panel">
-                  <div className="adjustment-group">
-                    <label htmlFor="creditScore">Credit Score (Defecto: 700)</label>
-                    <input
-                      id="creditScore"
-                      type="number"
-                      name="creditScore"
-                      min="300"
-                      max="850"
-                      value={adjustableValues.creditScore}
-                      onChange={handleAdjustableChange}
-                      className="form-input"
-                    />
-                  </div>
-                  
-                  <div className="adjustment-group">
-                    <label htmlFor="currentDebt">Deuda Actual Mensual – £ (Defecto: 0)</label>
-                    <input
-                      id="currentDebt"
-                      type="number"
-                      name="currentDebt"
-                      min="0"
-                      value={adjustableValues.currentDebt}
-                      onChange={handleAdjustableChange}
-                      className="form-input"
-                    />
-                  </div>
-                  
-                  <button
-                    type="button"
-                    className="btn-primary"
-                    onClick={handleRecalculate}
-                  >
-                    🔄 Recalcular con Nuevos Valores
-                  </button>
-                </div>
-              )}
-            </div>
           </div>
         )}
       </div>
