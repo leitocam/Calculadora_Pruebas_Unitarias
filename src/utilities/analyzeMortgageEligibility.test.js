@@ -1,164 +1,92 @@
-import { analyzeMortgageEligibility, calculateMonthlyPayment } from './calculations';
+import { analyzeMortgageEligibility } from './calculations';
 
 describe('analyzeMortgageEligibility', () => {
-
-  /**
-   * TC1: Caso donde no se generan escenarios asequibles
-   * El principal es válido pero todos los escenarios exceden el 43% de affordability
-   */
-  it('TC1: Debe retornar NO_AFFORDABLE_SCENARIOS cuando ningún escenario cumple la relación 43%', () => {
-    // Arrange
-    const applicant = {
-      monthlyIncome: 2000,
-      monthlyCommitments: 1500,
-      propertyPrice: 200000,
-      deposit: 40000,
-      currentDebt: 200,
-      creditScore: 700,
-      loanTerm: 30
-    };
-
-    // Act
-    const result = analyzeMortgageEligibility(applicant);
-
-    // Assert
-    expect(result.eligible).toBe(false);
-    expect(result.reason).toBe('NO_AFFORDABLE_SCENARIOS');
-    expect(result.details).toHaveProperty('income');
-    expect(result.details).toHaveProperty('commitments');
-  });
-
-  /**
-   * TC2: Caso donde la tasa de interés resultante es 0%
-   * Valida que se genera al menos un escenario cuando la tasa es muy baja
-   */
-  it('TC2: Debe generar escenarios cuando las tasas son bajas y el pago es asequible', () => {
-    // Arrange
-    const applicant = {
-      monthlyIncome: 5000,
-      monthlyCommitments: 500,
-      propertyPrice: 300000,
-      deposit: 100000,
-      currentDebt: 0,
-      creditScore: 750,
-      loanTerm: 30
-    };
-
-    // Act
-    const result = analyzeMortgageEligibility(applicant);
-
-    // Assert
-    expect(result.eligible).toBe(true);
-    expect(Array.isArray(result.scenarios)).toBe(true);
-    expect(result.scenarios.length).toBeGreaterThan(0);
-    expect(result.scenarios[0]).toHaveProperty('interestRate');
-    expect(result.scenarios[0]).toHaveProperty('monthlyPayment');
-  });
-
-  /**
-   * TC3: Caso donde después del loop no hay escenarios (scenarios.length === 0)
-   * Simula que todas las tasas generan compromisos > 43%
-   */
-  it('TC3: Debe retornar NO_AFFORDABLE_SCENARIOS cuando el loop no agrega escenarios', () => {
-    // Arrange
-    const applicant = {
-      monthlyIncome: 1500,
-      monthlyCommitments: 1400,
-      propertyPrice: 150000,
-      deposit: 30000,
-      currentDebt: 0,
-      creditScore: 700,
-      loanTerm: 30
-    };
-
-    // Act
-    const result = analyzeMortgageEligibility(applicant);
-
-    // Assert
-    expect(result.eligible).toBe(false);
-    expect(result.reason).toBe('NO_AFFORDABLE_SCENARIOS');
-    expect(result.scenarios).toBeUndefined();
-  });
-
-  /**
-   * TC4: Caso donde existen escenarios válidos y se selecciona correctamente el bestScenario
-   */
-  it('TC4: Debe retornar eligible=true y definir bestScenario cuando hay escenarios válidos', () => {
-    // Arrange
-    const applicant = {
-      monthlyIncome: 6000,
-      monthlyCommitments: 800,
-      propertyPrice: 400000,
-      deposit: 120000,
-      currentDebt: 100,
-      creditScore: 720,
-      loanTerm: 25
-    };
-
-    // Act
-    const result = analyzeMortgageEligibility(applicant);
-
-    // Assert
-    expect(result.eligible).toBe(true);
-    expect(result.bestScenario).toBeDefined();
-    expect(result.bestScenario).toHaveProperty('interestRate');
-    expect(result.bestScenario).toHaveProperty('monthlyPayment');
-    expect(result.bestScenario).toHaveProperty('affordabilityRatio');
-  });
-
-  /**
-   * TC5: Caso donde el ciclo sobre tasas de interés genera múltiples escenarios
-   * Valida que scenarios.length > 1
-   */
-  it('TC5: Debe generar múltiples escenarios cuando varias tasas cumplen affordability', () => {
-    // Arrange
-    const applicant = {
-      monthlyIncome: 8000,
-      monthlyCommitments: 1000,
-      propertyPrice: 500000,
-      deposit: 150000,
-      currentDebt: 200,
-      creditScore: 750,
-      loanTerm: 30
-    };
-
-    // Act
-    const result = analyzeMortgageEligibility(applicant);
-
-    // Assert
-    expect(result.eligible).toBe(true);
-    expect(Array.isArray(result.scenarios)).toBe(true);
-    expect(result.scenarios.length).toBeGreaterThan(1);
-    
-    // Valida que cada escenario tenga la estructura correcta
-    result.scenarios.forEach(scenario => {
-      expect(scenario).toHaveProperty('interestRate');
-      expect(scenario).toHaveProperty('monthlyPayment');
-      expect(scenario).toHaveProperty('affordabilityRatio');
-      expect(scenario).toHaveProperty('totalMonthlyCommitment');
+  it('returns INVALID_INPUT when applicant data is missing', () => {
+    expect(analyzeMortgageEligibility()).toEqual({
+      eligible: false,
+      reason: 'INVALID_INPUT',
     });
   });
 
-  /**
-   * TC6: Caso general completo con perfil válido
-   * Valida que el objeto de respuesta contiene todas las propiedades requeridas
-   */
-  it('TC6: Debe retornar estructura completa cuando el solicitante es elegible', () => {
-    // Arrange
-    const applicant = {
-      monthlyIncome: 7000,
+  it('returns INSUFFICIENT_INCOME when commitments exceed monthly income', () => {
+    const result = analyzeMortgageEligibility({
+      monthlyIncome: 1000,
+      monthlyCommitments: 1200,
+      propertyPrice: 200000,
+      deposit: 20000,
+      creditScore: 720,
+      loanTerm: 30,
+    });
+
+    expect(result).toEqual({
+      eligible: false,
+      reason: 'INSUFFICIENT_INCOME',
+      details: { deficit: 200 },
+    });
+  });
+
+  it('returns INSUFFICIENT_DEPOSIT when deposit is lower than 5%', () => {
+    const result = analyzeMortgageEligibility({
+      monthlyIncome: 4000,
+      monthlyCommitments: 500,
+      propertyPrice: 300000,
+      deposit: 10000,
+      currentDebt: 0,
+      creditScore: 710,
+      loanTerm: 30,
+    });
+
+    expect(result.eligible).toBe(false);
+    expect(result.reason).toBe('INSUFFICIENT_DEPOSIT');
+    expect(result.details).toEqual({ required: 15000, provided: 10000 });
+  });
+
+  it('returns EXCESSIVE_CURRENT_DEBT when debt ratio is over 50%', () => {
+    const result = analyzeMortgageEligibility({
+      monthlyIncome: 4000,
+      monthlyCommitments: 500,
+      propertyPrice: 300000,
+      deposit: 60000,
+      currentDebt: 2500,
+      creditScore: 710,
+      loanTerm: 30,
+    });
+
+    expect(result.eligible).toBe(false);
+    expect(result.reason).toBe('EXCESSIVE_CURRENT_DEBT');
+    expect(result.details.currentRatio).toBeCloseTo(62.5, 1);
+    expect(result.details.limit).toBe(50);
+  });
+
+  it('returns NO_AFFORDABLE_SCENARIOS when no interest scenario is affordable', () => {
+    const result = analyzeMortgageEligibility({
+      monthlyIncome: 2500,
       monthlyCommitments: 900,
+      propertyPrice: 350000,
+      deposit: 17500,
+      currentDebt: 200,
+      creditScore: 720,
+      loanTerm: 30,
+    });
+
+    expect(result).toEqual({
+      eligible: false,
+      reason: 'NO_AFFORDABLE_SCENARIOS',
+      details: { income: 2500, commitments: 900 },
+    });
+  });
+
+  it('returns a full successful analysis with scenarios for valid applicant', () => {
+    const result = analyzeMortgageEligibility({
+      monthlyIncome: 9000,
+      monthlyCommitments: 500,
       propertyPrice: 450000,
-      deposit: 135000,
-      currentDebt: 150,
-      creditScore: 700,
-      loanTerm: 28
-    };
+      deposit: 112500,
+      currentDebt: 300,
+      creditScore: 760,
+      loanTerm: 30,
+    });
 
-    // Act
-    const result = analyzeMortgageEligibility(applicant);
-
-    // Assert
     expect(result.eligible).toBe(true);
     expect(result).toHaveProperty('applicantProfile');
     expect(result).toHaveProperty('riskAssessment');
@@ -166,23 +94,75 @@ describe('analyzeMortgageEligibility', () => {
     expect(result).toHaveProperty('bestScenario');
     expect(result).toHaveProperty('summary');
 
-    // Valida estructura de applicantProfile
-    expect(result.applicantProfile).toHaveProperty('creditRisk');
-    expect(result.applicantProfile).toHaveProperty('creditScore');
-    expect(result.applicantProfile).toHaveProperty('debtToIncomeRatio');
-    expect(result.applicantProfile).toHaveProperty('depositStrategy');
-    expect(result.applicantProfile).toHaveProperty('depositAmount');
-    expect(result.applicantProfile).toHaveProperty('depositRatioPercentage');
+    expect(result.applicantProfile).toEqual({
+      creditRisk: 'EXCELLENT',
+      creditScore: 760,
+      debtToIncomeRatio: 3,
+      depositStrategy: 'OPTIMAL',
+      depositAmount: 112500,
+      depositRatioPercentage: 25,
+    });
 
-    // Valida estructura de riskAssessment
-    expect(result.riskAssessment).toHaveProperty('level');
-    expect(result.riskAssessment).toHaveProperty('score');
-    expect(result.riskAssessment).toHaveProperty('recommendation');
+    expect(result.riskAssessment).toEqual({
+      level: 'LOW',
+      score: 22,
+      recommendation: 'APPROVE_STANDARD',
+    });
 
-    // Valida estructura de summary
-    expect(result.summary).toHaveProperty('loanAmount');
-    expect(result.summary).toHaveProperty('propertyPrice');
-    expect(result.summary).toHaveProperty('availableIncome');
-    expect(result.summary).toHaveProperty('recommendation');
+    expect(Array.isArray(result.scenarios)).toBe(true);
+    expect(result.scenarios.length).toBe(5);
+    result.scenarios.forEach((scenario) => {
+      expect(scenario).toHaveProperty('interestRate');
+      expect(scenario).toHaveProperty('monthlyPayment');
+      expect(scenario).toHaveProperty('affordabilityRatio');
+      expect(scenario).toHaveProperty('totalMonthlyCommitment');
+    });
+
+    expect(result.bestScenario).toEqual({
+      interestRate: 4.5,
+      monthlyPayment: 1710.35,
+      affordabilityRatio: 28,
+    });
+
+    expect(result.summary).toEqual({
+      loanAmount: 337500,
+      propertyPrice: 450000,
+      availableIncome: 8500,
+      recommendation: 'Depósito fuerte. Tasas favorables.',
+    });
+  });
+
+  it('assigns MINIMUM_REQUIRED strategy and VERY_POOR credit risk at lower bounds', () => {
+    const result = analyzeMortgageEligibility({
+      monthlyIncome: 7000,
+      monthlyCommitments: 300,
+      propertyPrice: 200000,
+      deposit: 10000,
+      currentDebt: 0,
+      creditScore: 599,
+      loanTerm: 30,
+    });
+
+    expect(result.eligible).toBe(true);
+    expect(result.applicantProfile.creditRisk).toBe('VERY_POOR');
+    expect(result.applicantProfile.depositStrategy).toBe('MINIMUM_REQUIRED');
+    expect(result.summary.recommendation).toBe('Depósito mínimo. Evalúa affordability.');
+  });
+
+  it('assigns INCREASE_SLIGHTLY strategy in middle deposit range and GOOD risk threshold', () => {
+    const result = analyzeMortgageEligibility({
+      monthlyIncome: 9000,
+      monthlyCommitments: 500,
+      propertyPrice: 300000,
+      deposit: 45000,
+      currentDebt: 200,
+      creditScore: 700,
+      loanTerm: 30,
+    });
+
+    expect(result.eligible).toBe(true);
+    expect(result.applicantProfile.creditRisk).toBe('GOOD');
+    expect(result.applicantProfile.depositStrategy).toBe('INCREASE_SLIGHTLY');
+    expect(result.summary.recommendation).toBe('Depósito moderado. Mejora con cada 1%.');
   });
 });
