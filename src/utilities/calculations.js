@@ -47,21 +47,24 @@ export const calculateMonthlyPayment = (principalAmount, annualInterestRate, loa
  * @param {object} data - Form data object
  * @returns {object} Mortgage calculation results
  */
-export const calculateMortgage = (data) => {
-  const {
-    salary,
-    salary2 = 0,
-    deposit,
-    commitments,
-    term,
-    interest
-  } = data;
+export const calculateMortgage = (data = {}) => {
+  const toNumber = (value, fallback = 0) => {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : fallback;
+  };
 
-  const totalSalary = parseInt(salary) + parseInt(salary2 || 0);
-  const maxHouseValue = calculateMaxHouseValue(totalSalary, 0, parseInt(deposit), parseInt(commitments));
-  const outstandingDebt = maxHouseValue - parseInt(deposit);
-  const monthlyPayment = calculateMonthlyPayment(outstandingDebt, parseFloat(interest), parseInt(term));
-  const totalPaid = monthlyPayment * parseInt(term) * 12;
+  const salary = toNumber(data.salary);
+  const salary2 = toNumber(data.salary2);
+  const deposit = toNumber(data.deposit);
+  const commitments = toNumber(data.commitments);
+  const term = toNumber(data.term);
+  const interest = toNumber(data.interest);
+
+  const totalSalary = salary + salary2;
+  const maxHouseValue = calculateMaxHouseValue(totalSalary, 0, deposit, commitments);
+  const outstandingDebt = Math.max(0, maxHouseValue - deposit);
+  const monthlyPayment = calculateMonthlyPayment(outstandingDebt, interest, term);
+  const totalPaid = monthlyPayment * term * 12;
   const totalInterest = totalPaid - outstandingDebt;
 
   return {
