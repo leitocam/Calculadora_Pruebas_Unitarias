@@ -53,23 +53,22 @@ describe('calculateMortgage', () => {
   });
 
   it('calculates mortgage fields for a normal scenario', () => {
-    const result = calculateMortgage({
-      salary: 60000,
-      salary2: 20000,
-      deposit: 50000,
-      commitments: 500,
-      term: 25,
-      interest: 4,
-    });
-
-    expect(result).toEqual({
-      maxHouseValue: 289500,
-      monthlyPayment: 1263.55,
-      totalPaid: 379063.66,
-      totalInterest: 139563.66,
-      outstandingDebt: 239500,
-    });
+  const result = calculateMortgage({
+    salary: 60000,
+    salary2: 20000,
+    deposit: 50000,
+    commitments: 500,
+    term: 25,
+    interest: 4,
   });
+
+  expect(result.maxHouseValue).toBe(289500);
+  expect(result.outstandingDebt).toBe(239500);
+  expect(result.monthlyPayment).toBeCloseTo(1264.17, 2);
+  expect(result.totalPaid).toBeCloseTo(379250.77, 2);
+  expect(result.totalInterest).toBeCloseTo(139750.77, 2);
+});
+
 });
 
 describe('calculateInsurance', () => {

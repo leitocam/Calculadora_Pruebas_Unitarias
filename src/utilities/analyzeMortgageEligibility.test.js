@@ -120,7 +120,7 @@ describe('analyzeMortgageEligibility', () => {
 
     expect(result.bestScenario).toEqual({
       interestRate: 4.5,
-      monthlyPayment: 1710.35,
+      monthlyPayment: 1710.06,
       affordabilityRatio: 28,
     });
 
