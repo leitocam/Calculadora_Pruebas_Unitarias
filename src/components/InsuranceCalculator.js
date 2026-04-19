@@ -15,9 +15,9 @@ const InsuranceCalculator = () => {
   const [error, setError] = useState('');
 
   const insuranceTypes = [
-    { value: 'basic', label: 'B\u00e1sico (0.3% - Presupuesto)', description: 'Cobertura esencial' },
-    { value: 'standard', label: 'Est\u00e1ndar (0.5% - Recomendado)', description: 'Cobertura completa' },
-    { value: 'premium', label: 'Premium (0.8% - Completo)', description: 'M\u00e1xima cobertura' }
+    { value: 'basic', label: 'Basico (0.3% - Presupuesto)', description: 'Cobertura esencial' },
+    { value: 'standard', label: 'Estandar (0.5% - Recomendado)', description: 'Cobertura completa' },
+    { value: 'premium', label: 'Premium (0.8% - Completo)', description: 'Maxima cobertura' }
   ];
 
   const handleChange = (e) => {
@@ -33,7 +33,7 @@ const InsuranceCalculator = () => {
     e.preventDefault();
     
     if (!formData.propertyValue || parseInt(formData.propertyValue) <= 0) {
-      setError('Por favor, ingresa un valor de propiedad v\u00e1lido');
+      setError('Por favor, ingresa un valor de propiedad válido');
       return;
     }
 
