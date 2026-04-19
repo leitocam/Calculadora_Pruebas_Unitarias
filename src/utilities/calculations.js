@@ -142,7 +142,6 @@ export const validateAffordability = (monthlyPayment, monthlyIncome) => {
   }
 };
 
-// V(G) = 8 - COMPLEJIDAD CICLOMÁTICA
 export const evaluateRiskLevel = (creditRisk, debtRatio) => {
   const riskMatrix = {
     EXCELLENT: { baseScore: 20, level: 'LOW', recommendation: 'APPROVE_STANDARD' },
