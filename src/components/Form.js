@@ -60,8 +60,9 @@ class Form extends Component {
 
         return (
           <form onSubmit={this.handleSubmit}>
-              <label name="salary">Your annual salary</label>
+              <label htmlFor="salary" name="salary">Your annual salary</label>
               <input 
+                  id="salary"
                   type="number"
                   placeholder="Your salary"
                   name="salary"
@@ -71,11 +72,12 @@ class Form extends Component {
 
 
             <div>
-                <button onClick={() => this.setState({ showing: !showing })}>Add another salary</button>
+                <button type="button" onClick={() => this.setState({ showing: !showing })}>Add another salary</button>
                 { showing 
                     ? <div>
-                        <label name="salary2">Other salary</label>
+                        <label htmlFor="salary2" name="salary2">Other salary</label>
                         <input 
+                            id="salary2"
                             type="number"
                             placeholder="Your other salary"
                             name="salary2"
@@ -87,32 +89,36 @@ class Form extends Component {
                 }
             </div>  
 
-              <label>Your deposit</label>
+              <label htmlFor="deposit">Your deposit</label>
               <input 
+                  id="deposit"
                   type="number"
                   placeholder="Your deposit"
                   name="deposit"
                   value={this.state.deposit}
                   onChange={this.handleChange}
               />
-              <label>Monthly commitments</label>
+              <label htmlFor="commitments">Monthly commitments</label>
               <input 
+                  id="commitments"
                   type="number"
                   placeholder="Your monthly commitments"
                   name="commitments"
                   value={this.state.commitments}
                   onChange={this.handleChange}
               />
-              <label>Mortgage term in years</label>
+              <label htmlFor="term">Mortgage term in years</label>
               <input 
+                  id="term"
                   type="number"
                   placeholder="Your mortgage term in years"
                   name="term"
                   value={this.state.term}
                   onChange={this.handleChange}
               />
-              <label>Monthly interest rate %</label>
+              <label htmlFor="interest">Monthly interest rate %</label>
               <input 
+                  id="interest"
                   type="number"
                   placeholder="Your interest rate"
                   name="interest"

@@ -173,6 +173,20 @@ const ComparisonTool = () => {
                   className="form-input"
                 />
               </div>
+
+              <div className="form-group">
+                <label htmlFor="commitments">Compromisos Mensuales (£) *</label>
+                <input
+                  id="commitments"
+                  type="number"
+                  name="commitments"
+                  placeholder="p.ej., 500"
+                  value={formData.commitments}
+                  onChange={handleChange}
+                  className={`form-input ${errors.commitments ? 'error' : ''}`}
+                />
+                {errors.commitments && <span className="error-message">{errors.commitments}</span>}
+              </div>
             </div>
 
             <div className="form-group">
