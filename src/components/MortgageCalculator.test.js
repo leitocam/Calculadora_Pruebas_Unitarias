@@ -1,58 +1,121 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import MortgageCalculator from './MortgageCalculator';
 
 describe('MortgageCalculator', () => {
   it('renders the main calculator form', () => {
     render(<MortgageCalculator />);
 
-    expect(screen.getByRole('heading', { name: /Calculadora de Hipotecas/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/Salario Anual Primario/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Depósito Inicial/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Compromisos Mensuales/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Analizar Hipoteca/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /calculadora de hipotecas/i })
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByLabelText(/salario anual primario/i)
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByLabelText(/deposito inicial/i)
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByLabelText(/compromisos mensuales/i)
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('button', { name: /analizar hipoteca/i })
+    ).toBeInTheDocument();
   });
 
   it('shows validation errors when required fields are missing', async () => {
     render(<MortgageCalculator />);
 
-    await userEvent.click(screen.getByRole('button', { name: /Analizar Hipoteca/i }));
+    fireEvent.click(
+      screen.getByRole('button', { name: /analizar hipoteca/i })
+    );
 
-    expect(screen.getByText(/Se requiere un salario válido/i)).toBeInTheDocument();
-    expect(screen.getByText(/Se requiere un depósito válido/i)).toBeInTheDocument();
-    expect(screen.getByText(/Se requiere un compromiso válido/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText(/se requiere un salario valido/i)
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByText(/se requiere un deposito valido/i)
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByText(/se requiere un compromiso valido/i)
+      ).toBeInTheDocument();
+    });
   });
 
   it('submits valid data and displays analysis results', async () => {
     render(<MortgageCalculator />);
 
-    await userEvent.type(screen.getByLabelText(/Salario Anual Primario/i), '60000');
-    await userEvent.type(screen.getByLabelText(/Depósito Inicial/i), '50000');
-    await userEvent.type(screen.getByLabelText(/Compromisos Mensuales/i), '500');
+    fireEvent.change(screen.getByLabelText(/salario anual primario/i), {
+      target: { value: '60000' },
+    });
 
-    await userEvent.click(screen.getByRole('button', { name: /Analizar Hipoteca/i }));
+    fireEvent.change(screen.getByLabelText(/deposito inicial/i), {
+      target: { value: '50000' },
+    });
 
-    expect(await screen.findByRole('heading', { name: /Resultados del Análisis/i })).toBeInTheDocument();
-    expect(screen.getByText(/ELEGIBLE PARA HIPOTECA/i)).toBeInTheDocument();
-    expect(screen.getByText(/Relación Deuda-Ingresos/i)).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText(/compromisos mensuales/i), {
+      target: { value: '500' },
+    });
+
+    fireEvent.click(
+      screen.getByRole('button', { name: /analizar hipoteca/i })
+    );
+
+    expect(
+      await screen.findByRole('heading', { name: /resultados del analisis/i })
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText(/elegible para hipoteca/i)
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText(/relacion deuda ingresos/i)
+    ).toBeInTheDocument();
   });
 
   it('allows recalculating from adjustment panel and shows confirmation message', async () => {
     render(<MortgageCalculator />);
 
-    await userEvent.type(screen.getByLabelText(/Salario Anual Primario/i), '60000');
-    await userEvent.type(screen.getByLabelText(/Depósito Inicial/i), '50000');
-    await userEvent.type(screen.getByLabelText(/Compromisos Mensuales/i), '500');
-    await userEvent.click(screen.getByRole('button', { name: /Analizar Hipoteca/i }));
+    fireEvent.change(screen.getByLabelText(/salario anual primario/i), {
+      target: { value: '60000' },
+    });
 
-    await screen.findByRole('heading', { name: /Resultados del Análisis/i });
+    fireEvent.change(screen.getByLabelText(/deposito inicial/i), {
+      target: { value: '50000' },
+    });
 
-    await userEvent.click(screen.getByRole('button', { name: /Ajustar Valores/i }));
-    await userEvent.clear(screen.getByLabelText(/Credit Score/i));
-    await userEvent.type(screen.getByLabelText(/Credit Score/i), '750');
-    await userEvent.click(screen.getByRole('button', { name: /Recalcular con Nuevos Valores/i }));
+    fireEvent.change(screen.getByLabelText(/compromisos mensuales/i), {
+      target: { value: '500' },
+    });
 
-    expect(await screen.findByText(/Resultados recalculados con los nuevos valores/i)).toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole('button', { name: /analizar hipoteca/i })
+    );
+
+    await screen.findByRole('heading', { name: /resultados del analisis/i });
+
+    fireEvent.click(
+      screen.getByRole('button', { name: /ajustar valores/i })
+    );
+
+    fireEvent.change(screen.getByLabelText(/credit score/i), {
+      target: { value: '750' },
+    });
+
+    fireEvent.click(
+      screen.getByRole('button', { name: /recalcular con nuevos valores/i })
+    );
+
+    expect(
+      await screen.findByText(/resultados recalculados con los nuevos valores/i)
+    ).toBeInTheDocument();
   });
 });

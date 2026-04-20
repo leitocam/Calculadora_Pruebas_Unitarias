@@ -3,7 +3,7 @@ import { calculateInsurance } from '../utilities/calculations';
 import '../styles/Calculator.css';
 
 /**
- * Componente Calculadora de Seguros - C\u00e1lculo de costos de seguros
+ * Componente Calculadora de Seguros - Calculo de costos de seguros
  */
 const InsuranceCalculator = () => {
   const [formData, setFormData] = useState({
@@ -22,7 +22,7 @@ const InsuranceCalculator = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
@@ -31,13 +31,16 @@ const InsuranceCalculator = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (!formData.propertyValue || parseInt(formData.propertyValue) <= 0) {
-      setError('Por favor, ingresa un valor de propiedad válido');
+      setError('Por favor, ingresa un valor de propiedad valido');
       return;
     }
 
-    const annualCost = calculateInsurance(parseInt(formData.propertyValue), formData.insuranceType);
+    const annualCost = calculateInsurance(
+      parseInt(formData.propertyValue),
+      formData.insuranceType
+    );
     const monthlyCost = annualCost / 12;
 
     setResult({
@@ -62,16 +65,18 @@ const InsuranceCalculator = () => {
       <div className="calculator-layout">
         <div className="form-section">
           <h2>Calculadora de Seguros</h2>
-          <p className="section-description">Calcula el costo anual del seguro de tu propiedad</p>
-          
+          <p className="section-description">
+            Calcula el costo anual del seguro de tu propiedad
+          </p>
+
           <form onSubmit={handleSubmit} className="calculator-form">
             <div className="form-group">
-              <label htmlFor="propertyValue">Valor de la Propiedad (£) *</label>
+              <label htmlFor="propertyValue">Valor de la Propiedad (GBP) *</label>
               <input
                 id="propertyValue"
                 type="number"
                 name="propertyValue"
-                placeholder="p.ej., 250000"
+                placeholder="Ej: 250000"
                 value={formData.propertyValue}
                 onChange={handleChange}
                 className={`form-input ${error ? 'error' : ''}`}
@@ -101,25 +106,36 @@ const InsuranceCalculator = () => {
             </div>
 
             <div className="form-actions">
-              <button type="submit" className="btn-primary">Calcular Seguro</button>
-              <button type="button" className="btn-secondary" onClick={handleReset}>Restablecer</button>
+              <button type="submit" className="btn-primary">
+                Calcular Seguro
+              </button>
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={handleReset}
+              >
+                Restablecer
+              </button>
             </div>
           </form>
         </div>
 
         {result && (
           <div className="results-section">
-            <h2>Estimaci\u00f3n de Seguro</h2>
+            <h2>Estimacion de Seguro</h2>
             <div className="results-card">
               <div className="result-item">
                 <span className="result-label">Valor de la Propiedad</span>
-                <span className="result-value">£{result.propertyValue.toLocaleString()}</span>
+                <span className="result-value">
+                  GBP {result.propertyValue.toLocaleString()}
+                </span>
               </div>
 
               <div className="result-item">
                 <span className="result-label">Tipo de Seguro</span>
                 <span className="result-value">
-                  {result.insuranceType.charAt(0).toUpperCase() + result.insuranceType.slice(1)}
+                  {result.insuranceType.charAt(0).toUpperCase() +
+                    result.insuranceType.slice(1)}
                 </span>
               </div>
 
@@ -127,16 +143,23 @@ const InsuranceCalculator = () => {
 
               <div className="result-item">
                 <span className="result-label">Costo Anual</span>
-                <span className="result-value highlight">£{result.annualCost.toLocaleString()}</span>
+                <span className="result-value highlight">
+                  GBP {result.annualCost.toLocaleString()}
+                </span>
               </div>
 
               <div className="result-item">
                 <span className="result-label">Costo Mensual</span>
-                <span className="result-value">£{result.monthlyCost.toFixed(2)}</span>
+                <span className="result-value">
+                  GBP {result.monthlyCost.toFixed(2)}
+                </span>
               </div>
 
               <div className="info-box">
-                <p>\ud83d\udca1 <strong>Consejo:</strong> A\u00f1ade este valor al pago mensual de hipoteca para obtener el costo total de vivienda.</p>
+                <p>
+                  <strong>Consejo:</strong> Anade este valor al pago mensual de
+                  hipoteca para obtener el costo total de vivienda.
+                </p>
               </div>
             </div>
           </div>

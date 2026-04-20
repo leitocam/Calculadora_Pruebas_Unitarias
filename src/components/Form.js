@@ -32,9 +32,10 @@ class Form extends Component {
         const commitments = parseInt(this.state.commitments);
         const interest = parseFloat(this.state.interest);
         const term = parseInt(this.state.term);
-        if (!salary || !deposit || !commitments || !term) {
+        if (salary <= 0 || deposit <= 0 || term <= 0 || commitments < 0) {
             return;
         }
+        
 
         this.props.onFormSubmit({
             salary,

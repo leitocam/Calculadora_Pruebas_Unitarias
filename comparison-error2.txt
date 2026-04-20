@@ -1,0 +1,534 @@
+
+> mortgage_calculator@0.1.0 test
+> react-scripts test "src/components/InsuranceCalculator.test.js" "--watchAll=false"
+
+  console.error
+    Warning: `ReactDOMTestUtils.act` is deprecated in favor of `React.act`. Import `act` from `react` instead of `react-dom/test-utils`. See https://react.dev/warnings/react-dom-test-utils for more info.
+
+    [0m [90m  5 |[39m describe([32m'InsuranceCalculator'[39m[33m,[39m () [33m=>[39m {
+     [90m  6 |[39m   it([32m'shows validation when property value is missing'[39m[33m,[39m [36masync[39m () [33m=>[39m {
+    [31m[1m>[22m[39m[90m  7 |[39m     render([33m<[39m[33mInsuranceCalculator[39m [33m/[39m[33m>[39m)[33m;[39m
+     [90m    |[39m           [31m[1m^[22m[39m
+     [90m  8 |[39m
+     [90m  9 |[39m     fireEvent[33m.[39mclick(
+     [90m 10 |[39m       screen[33m.[39mgetByRole([32m'button'[39m[33m,[39m { name[33m:[39m [35m/calcular seguro/i[39m })[0m
+
+      at printWarning (node_modules/react-dom/cjs/react-dom-test-utils.development.js:71:30)
+      at error (node_modules/react-dom/cjs/react-dom-test-utils.development.js:45:7)
+      at actWithWarning (node_modules/react-dom/cjs/react-dom-test-utils.development.js:1736:7)
+      at node_modules/@testing-library/react/dist/act-compat.js:63:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:159:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:246:10)
+      at Object.<anonymous> (src/components/InsuranceCalculator.test.js:7:11)
+      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (node_modules/@jest/core/build/cli/index.js:173:3)
+
+FAIL src/components/InsuranceCalculator.test.js
+  InsuranceCalculator
+    √ shows validation when property value is missing (124 ms)
+    × calculates and renders insurance result for premium plan (1081 ms)
+    × resets form and clears rendered result (1020 ms)
+
+  ● InsuranceCalculator › calculates and renders insurance result for premium plan
+
+    Unable to find role="heading" and name `/estimación de seguro/i`
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"calculator-content"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"calculator-layout"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"form-section"[39m
+            [36m>[39m
+              [36m<h2>[39m
+                [0mCalculadora de Seguros[0m
+              [36m</h2>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"section-description"[39m
+              [36m>[39m
+                [0mCalcula el costo anual del seguro de tu propiedad[0m
+              [36m</p>[39m
+              [36m<form[39m
+                [33mclass[39m=[32m"calculator-form"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"form-group"[39m
+                [36m>[39m
+                  [36m<label[39m
+                    [33mfor[39m=[32m"propertyValue"[39m
+                  [36m>[39m
+                    [0mValor de la Propiedad (£) *[0m
+                  [36m</label>[39m
+                  [36m<input[39m
+                    [33mclass[39m=[32m"form-input "[39m
+                    [33mid[39m=[32m"propertyValue"[39m
+                    [33mname[39m=[32m"propertyValue"[39m
+                    [33mplaceholder[39m=[32m"p.ej., 250000"[39m
+                    [33mtype[39m=[32m"number"[39m
+                    [33mvalue[39m=[32m"100000"[39m
+                  [36m/>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"form-group"[39m
+                [36m>[39m
+                  [36m<label>[39m
+                    [0mTipo de Seguro *[0m
+                  [36m</label>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"insurance-options"[39m
+                  [36m>[39m
+                    [36m<label[39m
+                      [33mclass[39m=[32m"insurance-option"[39m
+                    [36m>[39m
+                      [36m<input[39m
+                        [33mname[39m=[32m"insuranceType"[39m
+                        [33mtype[39m=[32m"radio"[39m
+                        [33mvalue[39m=[32m"basic"[39m
+                      [36m/>[39m
+                      [36m<div[39m
+                        [33mclass[39m=[32m"option-content"[39m
+                      [36m>[39m
+                        [36m<span[39m
+                          [33mclass[39m=[32m"option-label"[39m
+                        [36m>[39m
+                          [0mBasico (0.3% - Presupuesto)[0m
+                        [36m</span>[39m
+                        [36m<span[39m
+                          [33mclass[39m=[32m"option-description"[39m
+                        [36m>[39m
+                          [0mCobertura esencial[0m
+                        [36m</span>[39m
+                      [36m</div>[39m
+                    [36m</label>[39m
+                    [36m<label[39m
+                      [33mclass[39m=[32m"insurance-option"[39m
+                    [36m>[39m
+                      [36m<input[39m
+                        [33mchecked[39m=[32m""[39m
+                        [33mname[39m=[32m"insuranceType"[39m
+                        [33mtype[39m=[32m"radio"[39m
+                        [33mvalue[39m=[32m"standard"[39m
+                      [36m/>[39m
+                      [36m<div[39m
+                        [33mclass[39m=[32m"option-content"[39m
+                      [36m>[39m
+                        [36m<span[39m
+                          [33mclass[39m=[32m"option-label"[39m
+                        [36m>[39m
+                          [0mEstandar (0.5% - Recomendado)[0m
+                        [36m</span>[39m
+                        [36m<span[39m
+                          [33mclass[39m=[32m"option-description"[39m
+                        [36m>[39m
+                          [0mCobertura completa[0m
+                        [36m</span>[39m
+                      [36m</div>[39m
+                    [36m</label>[39m
+                    [36m<label[39m
+                      [33mclass[39m=[32m"insurance-option"[39m
+                    [36m>[39m
+                      [36m<input[39m
+                        [33mname[39m=[32m"insuranceType"[39m
+                        [33mtype[39m=[32m"radio"[39m
+                        [33mvalue[39m=[32m"premium"[39m
+                      [36m/>[39m
+                      [36m<div[39m
+                        [33mclass[39m=[32m"option-content"[39m
+                      [36m>[39m
+                        [36m<span[39m
+                          [33mclass[39m=[32m"option-label"[39m
+                        [36m>[39m
+                          [0mPremium (0.8% - Completo)[0m
+                        [36m</span>[39m
+                        [36m<span[39m
+                          [33mclass[39m=[32m"option-description"[39m
+                        [36m>[39m
+                          [0mMaxima cobertura[0m
+                        [36m</span>[39m
+                      [36m</div>[39m
+                    [36m</label>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"form-actions"[39m
+                [36m>[39m
+                  [36m<button[39m
+                    [33mclass[39m=[32m"btn-primary"[39m
+                    [33mtype[39m=[32m"submit"[39m
+                  [36m>[39m
+                    [0mCalcular Seguro[0m
+                  [36m</button>[39m
+                  [36m<button[39m
+                    [33mclass[39m=[32m"btn-secondary"[39m
+                    [33mtype[39m=[32m"button"[39m
+                  [36m>[39m
+                    [0mRestablecer[0m
+                  [36m</button>[39m
+                [36m</div>[39m
+              [36m</form>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"results-section"[39m
+            [36m>[39m
+              [36m<h2>[39m
+                [0mEstimaci\u00f3n de Seguro[0m
+              [36m</h2>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"results-card"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"result-item"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"result-label"[39m
+                  [36m>[39m
+                    [0mValor de la Propiedad[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"result-value"[39m
+                  [36m>[39m
+                    [0m£[0m
+                    [0m100,000[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"result-item"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"result-label"[39m
+                  [36m>[39m
+                    [0mTipo de Seguro[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"result-value"[39m
+                  [36m>[39m
+                    [0mPremium[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"divider"[39m
+                [36m/>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"result-item"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"result-label"[39m
+                  [36m>[39m
+                    [0mCosto Anual[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"result-value highlight"[39m
+                  [36m>[39m
+                    [0m£[0m
+                    [0m800[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"result-item"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"result-label"[39m
+                  [36m>[39m
+                    [0mCosto Mensual[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"result-value"[39m
+                  [36m>[39m
+                    [0m£[0m
+                    [0m66.67[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"info-box"[39m
+                [36m>[39m
+                  [36m<p>[39m
+                    [0m\ud83d\udca1 [0m
+                    [36m<strong>[39m
+                      [0mConsejo:[0m
+                    [36m</strong>[39m
+                    [0m A\u00f1ade este valor al pago mensual de hipoteca para obtener el costo total de vivienda.[0m
+                  [36m</p>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+    [0m [90m 34 |[39m
+     [90m 35 |[39m     expect(
+    [31m[1m>[22m[39m[90m 36 |[39m       [36mawait[39m screen[33m.[39mfindByRole([32m'heading'[39m[33m,[39m { name[33m:[39m [35m/estimación de seguro/i[39m })
+     [90m    |[39m                    [31m[1m^[22m[39m
+     [90m 37 |[39m     )[33m.[39mtoBeInTheDocument()[33m;[39m
+     [90m 38 |[39m
+     [90m 39 |[39m     expect(screen[33m.[39mgetByText([32m'£800'[39m))[33m.[39mtoBeInTheDocument()[33m;[39m[0m
+
+      at waitForWrapper (node_modules/@testing-library/react/node_modules/@testing-library/dom/dist/wait-for.js:166:27)
+      at findByRole (node_modules/@testing-library/react/node_modules/@testing-library/dom/dist/query-helpers.js:86:33)
+      at Object.<anonymous> (src/components/InsuranceCalculator.test.js:36:20)
+      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (node_modules/@jest/core/build/cli/index.js:173:3)
+
+  ● InsuranceCalculator › resets form and clears rendered result
+
+    Unable to find role="heading" and name `/estimación de seguro/i`
+
+    Ignored nodes: comments, script, style
+    [36m<body>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"calculator-content"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"calculator-layout"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"form-section"[39m
+            [36m>[39m
+              [36m<h2>[39m
+                [0mCalculadora de Seguros[0m
+              [36m</h2>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"section-description"[39m
+              [36m>[39m
+                [0mCalcula el costo anual del seguro de tu propiedad[0m
+              [36m</p>[39m
+              [36m<form[39m
+                [33mclass[39m=[32m"calculator-form"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"form-group"[39m
+                [36m>[39m
+                  [36m<label[39m
+                    [33mfor[39m=[32m"propertyValue"[39m
+                  [36m>[39m
+                    [0mValor de la Propiedad (£) *[0m
+                  [36m</label>[39m
+                  [36m<input[39m
+                    [33mclass[39m=[32m"form-input "[39m
+                    [33mid[39m=[32m"propertyValue"[39m
+                    [33mname[39m=[32m"propertyValue"[39m
+                    [33mplaceholder[39m=[32m"p.ej., 250000"[39m
+                    [33mtype[39m=[32m"number"[39m
+                    [33mvalue[39m=[32m"100000"[39m
+                  [36m/>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"form-group"[39m
+                [36m>[39m
+                  [36m<label>[39m
+                    [0mTipo de Seguro *[0m
+                  [36m</label>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"insurance-options"[39m
+                  [36m>[39m
+                    [36m<label[39m
+                      [33mclass[39m=[32m"insurance-option"[39m
+                    [36m>[39m
+                      [36m<input[39m
+                        [33mname[39m=[32m"insuranceType"[39m
+                        [33mtype[39m=[32m"radio"[39m
+                        [33mvalue[39m=[32m"basic"[39m
+                      [36m/>[39m
+                      [36m<div[39m
+                        [33mclass[39m=[32m"option-content"[39m
+                      [36m>[39m
+                        [36m<span[39m
+                          [33mclass[39m=[32m"option-label"[39m
+                        [36m>[39m
+                          [0mBasico (0.3% - Presupuesto)[0m
+                        [36m</span>[39m
+                        [36m<span[39m
+                          [33mclass[39m=[32m"option-description"[39m
+                        [36m>[39m
+                          [0mCobertura esencial[0m
+                        [36m</span>[39m
+                      [36m</div>[39m
+                    [36m</label>[39m
+                    [36m<label[39m
+                      [33mclass[39m=[32m"insurance-option"[39m
+                    [36m>[39m
+                      [36m<input[39m
+                        [33mchecked[39m=[32m""[39m
+                        [33mname[39m=[32m"insuranceType"[39m
+                        [33mtype[39m=[32m"radio"[39m
+                        [33mvalue[39m=[32m"standard"[39m
+                      [36m/>[39m
+                      [36m<div[39m
+                        [33mclass[39m=[32m"option-content"[39m
+                      [36m>[39m
+                        [36m<span[39m
+                          [33mclass[39m=[32m"option-label"[39m
+                        [36m>[39m
+                          [0mEstandar (0.5% - Recomendado)[0m
+                        [36m</span>[39m
+                        [36m<span[39m
+                          [33mclass[39m=[32m"option-description"[39m
+                        [36m>[39m
+                          [0mCobertura completa[0m
+                        [36m</span>[39m
+                      [36m</div>[39m
+                    [36m</label>[39m
+                    [36m<label[39m
+                      [33mclass[39m=[32m"insurance-option"[39m
+                    [36m>[39m
+                      [36m<input[39m
+                        [33mname[39m=[32m"insuranceType"[39m
+                        [33mtype[39m=[32m"radio"[39m
+                        [33mvalue[39m=[32m"premium"[39m
+                      [36m/>[39m
+                      [36m<div[39m
+                        [33mclass[39m=[32m"option-content"[39m
+                      [36m>[39m
+                        [36m<span[39m
+                          [33mclass[39m=[32m"option-label"[39m
+                        [36m>[39m
+                          [0mPremium (0.8% - Completo)[0m
+                        [36m</span>[39m
+                        [36m<span[39m
+                          [33mclass[39m=[32m"option-description"[39m
+                        [36m>[39m
+                          [0mMaxima cobertura[0m
+                        [36m</span>[39m
+                      [36m</div>[39m
+                    [36m</label>[39m
+                  [36m</div>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"form-actions"[39m
+                [36m>[39m
+                  [36m<button[39m
+                    [33mclass[39m=[32m"btn-primary"[39m
+                    [33mtype[39m=[32m"submit"[39m
+                  [36m>[39m
+                    [0mCalcular Seguro[0m
+                  [36m</button>[39m
+                  [36m<button[39m
+                    [33mclass[39m=[32m"btn-secondary"[39m
+                    [33mtype[39m=[32m"button"[39m
+                  [36m>[39m
+                    [0mRestablecer[0m
+                  [36m</button>[39m
+                [36m</div>[39m
+              [36m</form>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"results-section"[39m
+            [36m>[39m
+              [36m<h2>[39m
+                [0mEstimaci\u00f3n de Seguro[0m
+              [36m</h2>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"results-card"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"result-item"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"result-label"[39m
+                  [36m>[39m
+                    [0mValor de la Propiedad[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"result-value"[39m
+                  [36m>[39m
+                    [0m£[0m
+                    [0m100,000[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"result-item"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"result-label"[39m
+                  [36m>[39m
+                    [0mTipo de Seguro[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"result-value"[39m
+                  [36m>[39m
+                    [0mStandard[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"divider"[39m
+                [36m/>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"result-item"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"result-label"[39m
+                  [36m>[39m
+                    [0mCosto Anual[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"result-value highlight"[39m
+                  [36m>[39m
+                    [0m£[0m
+                    [0m500[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"result-item"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"result-label"[39m
+                  [36m>[39m
+                    [0mCosto Mensual[0m
+                  [36m</span>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"result-value"[39m
+                  [36m>[39m
+                    [0m£[0m
+                    [0m41.67[0m
+                  [36m</span>[39m
+                [36m</div>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"info-box"[39m
+                [36m>[39m
+                  [36m<p>[39m
+                    [0m\ud83d\udca1 [0m
+                    [36m<strong>[39m
+                      [0mConsejo:[0m
+                    [36m</strong>[39m
+                    [0m A\u00f1ade este valor al pago mensual de hipoteca para obtener el costo total de vivienda.[0m
+                  [36m</p>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</body>[39m
+
+    [0m [90m 53 |[39m
+     [90m 54 |[39m     expect(
+    [31m[1m>[22m[39m[90m 55 |[39m       [36mawait[39m screen[33m.[39mfindByRole([32m'heading'[39m[33m,[39m { name[33m:[39m [35m/estimación de seguro/i[39m })
+     [90m    |[39m                    [31m[1m^[22m[39m
+     [90m 56 |[39m     )[33m.[39mtoBeInTheDocument()[33m;[39m
+     [90m 57 |[39m
+     [90m 58 |[39m     fireEvent[33m.[39mclick([0m
+
+      at waitForWrapper (node_modules/@testing-library/react/node_modules/@testing-library/dom/dist/wait-for.js:166:27)
+      at findByRole (node_modules/@testing-library/react/node_modules/@testing-library/dom/dist/query-helpers.js:86:33)
+      at Object.<anonymous> (src/components/InsuranceCalculator.test.js:55:20)
+      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)
+      at runJest (node_modules/@jest/core/build/runJest.js:404:19)
+      at _run10000 (node_modules/@jest/core/build/cli/index.js:320:7)
+      at runCLI (node_modules/@jest/core/build/cli/index.js:173:3)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 1 passed, 3 total
+Snapshots:   0 total
+Time:        4.518 s, estimated 5 s
+Ran all test suites matching /src\\components\\InsuranceCalculator.test.js/i.
