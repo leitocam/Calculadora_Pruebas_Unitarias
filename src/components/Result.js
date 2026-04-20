@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Result = (props) => {
+const Result = ({ results = 0, repaymentResults = 0 }) => {
     return (
         <>
-        <h2>Maximum House Value: £{props.results}</h2>
-        <h2>Expected Monthly Repayments: £{props.repaymentResults}</h2> 
+        <h2>Maximum House Value: £{results}</h2>
+        <h2>Expected Monthly Repayments: £{repaymentResults}</h2> 
         </>
     )
 }
